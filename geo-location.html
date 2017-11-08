@@ -167,13 +167,23 @@ TODO: change the API key to your own.
       var options = {
         enableHighAccuracy: this.highAccuracy,
         timeout: this.timeout,
-        maximumAge: this.maximumAge
+        maximumAge: this.maximumAge,
+
+        desiredAccuracy: 10,
+        stationaryRadius: 20,
+        distanceFilter: 30,
+        interval: 1000,
+        debug: true
       };
 
       if (this.watchPos) {
-        this._watch = navigator.geolocation.watchPosition(success, error, options);
+        //this._watch = navigator.geolocation.watchPosition(success, error, options);
+        this._watch = backgroundGeolocation.configure(success, error, options);
+        backgroundGeolocation.start();
       } else {
-        navigator.geolocation.getCurrentPosition(success, error, options);
+        //navigator.geolocation.getCurrentPosition(success, error, options);
+        backgroundGeolocation.configure(success, error, options);
+        backgroundGeolocation.start();
       }
     },
 
@@ -183,6 +193,22 @@ TODO: change the API key to your own.
      * @param {Position} pos A position object from the Geolocation API.
      */
     _onPosition: function(pos) {
+      pos.timestamp = pos.time;
+      //delete pos.time;
+      pos.coords = {};
+      pos.coords.latitude = pos.latitude;
+      //delete pos.latitude;
+      pos.coords.longitude = pos.longitude;
+      //delete pos.longitude;
+      pos.coords.altitude = pos.altitude;
+      //delete pos.altitude;
+      pos.coords.accuracy = pos.accuracy;
+      //delete pos.accuracy;
+      pos.coords.speed = pos.speed;
+      //delete pos.speed;
+      pos.coords.heading = pos.bearing;
+      //delete pos.bearing;
+
       this._setPosition(pos);
       this._setLatitude(pos.coords.latitude);
       this._setLongitude(pos.coords.longitude);
