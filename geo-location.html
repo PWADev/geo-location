@@ -108,12 +108,17 @@ TODO: change the API key to your own.
         notify: true,
         readOnly: true,
         value: null
-      }
+      },
+
+      debug: {
+        type: Boolean,
+        value: false
+      },
 
     },
 
     observers: [
-      'fetch(idle, watchPos, highAccuracy, timeout, maximumAge)'
+      'fetch(idle, watchPos, highAccuracy, timeout, maximumAge, debug)'
     ],
 
    /**
@@ -173,7 +178,7 @@ TODO: change the API key to your own.
         stationaryRadius: 20,
         distanceFilter: 30,
         interval: 1000,
-        debug: true
+        debug: this.debug
       };
 
       if (this.watchPos) {
